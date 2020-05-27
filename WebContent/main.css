@@ -1,0 +1,147 @@
+body {
+    background-color: #F0F0F0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.product img:hover{
+    transition: transform .2s;
+    transform: scale(2);
+}
+
+header{
+    color:black;
+}
+
+.caption{
+    display: block;
+    text-align: center;
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    padding-top: 15px;
+}
+
+.nav {
+    overflow: hidden;
+    background-color: #6D6D6D;
+}
+
+.nav a {
+    float: left;
+    display: inline-flex;
+    color: #F0F0F0;
+    padding: 15px 15px;
+    text-decoration: none;
+}
+
+.nav a1 {
+    float: right;
+    display: block;
+    color: #F0F0F0;
+    padding: 15px ;
+    text-decoration: none;
+}
+
+.left-nav{
+    display: block;
+    text-decoration: none;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas: 'left middle middle middle middle';
+    grid-column-gap: 10px; 
+    padding-top: 15px;
+    padding-bottom : 15px;
+} 
+
+.left,
+.middle {
+    background-color: white;
+    padding: 10px;
+}
+
+.left {
+    grid-area: left;
+}
+
+.middle {
+    grid-area: middle;
+}
+
+.product-header{
+    font-size: x-large;
+    color: #DE5764;
+    padding: 15px;
+}
+
+.about {
+    padding: 15px;
+    display: flex;
+    border-bottom: 2px solid grey;
+} 
+
+.mgmt{
+    max-width: 50%;
+}
+
+.about description-title{
+    display: block;
+    font-size: x-large;
+    color: #DE5764;
+    padding-bottom: 15px;
+    min-width: 60%;
+}
+
+.about description-body{
+    display: block;
+    font-size: medium;
+    color: #6D6D6D;
+    min-width: 60%;
+}
+
+.product {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    border-bottom: 2px solid grey;
+} 
+
+.product-card {
+    max-height: auto; 
+    max-width: 150px;
+    text-align: center;
+    min-width: 33%; 
+}
+
+.product-card a{
+    text-decoration:none;
+}
+
+.product-card product-name{
+    display: block;
+    font-size: large;
+    font-weight: bold;
+}
+
+.product-card product-price{
+    display: block;
+    font-size: large;
+    font-weight: bold;
+    padding: 10px;
+    color: red;
+}
+
+.product-card product-description{
+    display: block;
+    font-size: small;
+    font-style: italic;
+    padding-bottom: 10px;
+    color: black;
+}
