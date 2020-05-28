@@ -1,0 +1,98 @@
+.listing {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 10px; 
+    background-color: white; 
+}
+
+.listing header{
+    grid-row: 1;
+    font-size: x-large;
+    text-align: center;
+    font-weight: bolder;
+    color:#DE5764;
+    padding-top: 15px;
+    padding-bottom: 25px;
+    text-transform: uppercase;
+}
+
+.listing p{
+    text-align: center;
+    color: #DE5764;
+    text-decoration: underline;
+}
+
+.extended-description{
+    padding: 15px;
+    font-size: medium;
+    font-style: italic;   
+    background-color: white; 
+}
+
+.error{
+    color:red;
+}
+
+.listing form {
+    grid-column: 1;
+    margin: auto;
+    width: 50%;
+    border: 3px solid #DE5764; 
+    padding: 10px;    
+}
+
+.listing img {    
+    max-height: 400px;
+    width: auto;
+
+}
+
+.listing img:hover{
+    transition: transform .2s;
+    transform: scale(1.1);
+}
+
+.listing input, select{
+    display: block;
+    padding-right: 60%;
+}
+
+.picture-carousel{
+    grid-row: 2;
+    position: relative;
+    margin: auto;
+    display: inline-block;
+}
+
+.picture-showcase{
+    display: none;
+}
+
+.prev, .next {
+    position: absolute;
+    padding: 5%;
+    color: white;
+    font-size: 25px;
+    user-select: none;
+    background-color: black;
+    top: 50%;
+    width: auto;
+}
+  
+.prev {
+    right: 105%;
+    border-radius: 2px 0 0 2px;
+}
+
+.next {
+    right: -20%;
+    border-radius: 2px 0 0 2px;
+}
+
+.prev:hover, .next:hover {
+    background-color:red;
+}
+
+.option{
+    text-transform: uppercase;
+}
