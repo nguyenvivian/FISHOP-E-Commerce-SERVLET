@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -64,9 +65,10 @@ public class Checkout extends HttpServlet{
 					"</tbody>\n" + 
 					"</table>");
 			out.println("<div>");
+			
 			out.println(
-					"        <form style='display:block;' id='myForm' onsubmit='checkForm();return false;' action='checkout' method='post'>\n" + 
-					"            <p class='error' id='error'></p>\n" + 
+					"        <form style='display:block;' id='myForm' onsubmit='return checkForm();' action='checkout' method='post'>\n" + 
+					"            <p style='color:darkred;' class='error' id='error'></p>\n" + 
 					"            <label for='fname'>First name:</label>\n" + 
 					"            <input style='display:block;' type='text' name='fname' id='fname'>\n" + 
 					"            <label for='lname'>Last name:</label>\n" + 
@@ -80,20 +82,22 @@ public class Checkout extends HttpServlet{
 					"            <label for='state'>State:</label>\n" + 
 					"            <input style='display:block;' type='text' name='state' id='state'>\n" + 
 					"            <label for='postalCode'>Postal Code (XXXXX):</label>\n" + 
-					"            <input style='display:block;' type='text' name='postalCode' id='postalCode'>\n" + 
+					"            <input style='display:block;' type='text' name='postalCode' id='postalCode'  onblur='calcTax(this.value,"+totalPrice+")'>\n" + 
 					"            <label for='shippingMethod'>Shipping Method:</label>\n" + 
-					"            <select style='display:block;' name='shippingMethod' id='shippingMethod'>\n" + 
-					"                <option>Overnight</option>\n" + 
-					"                <option>2 Days Expedited</option>\n" + 
-					"                <option>6 Days Ground</option>\n" + 
-					"            </select>\n" + 
+					"            <select style='display:block;' id='shippingMethod' name='shippingMethod' onChange='addShipping(this.value)'>\n" + 
+					"                <option value='default' selected='selected'>Select From List</option>\n" + 
+					"                <option>Overnight $20 </option>\n" + 
+					"                <option>2 Days Expedited $15</option>\n" + 
+					"                <option>6 Days Ground $10</option>\n" + 
+					"            </select>"+
 					"            <label for='ccnumber'>Credit Card Number (XXXXXXXXXXXXXXXX):</label>\n" + 
 					"            <input style='display:block;' type='text' name='ccnumber' id='ccnumber'>\n" + 
 					"            <label for='ccv'>CCV (XXX) or (XXXX):</label>\n" + 
 					"            <input style='display:block;' type='text' name='ccv' id='ccv'>\n" + 
 					"            <input style='display:block;' type='submit' id='submit'>\n" + 
 					"        </form>\n"+
-					"<p> Total Price: $"+(new BigDecimal(totalPrice)).setScale(2, BigDecimal.ROUND_HALF_UP)+" <p>");
+					" <label for=\"total\">Total Price + Shipping + Tax Rate (<a id='taxrate' name='taxrate'></a>): </label>\n" +
+					"<p id='total'>"+(new BigDecimal(totalPrice)).setScale(2, BigDecimal.ROUND_HALF_UP)+" <p>");
 			session.setAttribute("TotalPrice", (new BigDecimal(totalPrice)).setScale(2, BigDecimal.ROUND_HALF_UP));
 			RequestDispatcher requestFooter=request.getRequestDispatcher("/footer.html");
 			requestFooter.include(request, response);
@@ -105,11 +109,13 @@ public class Checkout extends HttpServlet{
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/sys?serverTimezone=US/Pacific", "root", "sql99server");
-			System.out.println(request.getParameter("fname"));
+
 			String address = request.getParameter("street")+' '+request.getParameter("city")+", "+request.getParameter("state")+' '+request.getParameter("postalCode");
 			String sql = "insert into product_order values(?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+			
 			HttpSession session = request.getSession();
 			ArrayList<String> shoppingCart = (ArrayList<String>) session.getAttribute("shoppingCart");
+			
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, request.getParameter("fname"));
 			preparedStatement.setString(2, request.getParameter("lname"));
@@ -120,8 +126,15 @@ public class Checkout extends HttpServlet{
 			preparedStatement.setString(7, request.getParameter("ccv"));
 			preparedStatement.setString(8, shoppingCart.toString());
 			preparedStatement.setString(9, session.getAttribute("TotalPrice").toString());
+			
 			preparedStatement.addBatch();
 			int[] affectedRecords = preparedStatement.executeBatch();
-		}catch (Exception e ) {System.out.println(e);}
+			
+			RequestDispatcher requestConfirmation = request.getRequestDispatcher("/submit-order");
+			requestConfirmation.forward(request,response);
+		}
+		catch (Exception e ) {
+			e.printStackTrace();
+		}
 	}
 }

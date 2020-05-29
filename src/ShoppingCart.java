@@ -67,8 +67,8 @@ public class ShoppingCart extends HttpServlet{
 			
 			out.println(
 					"<p><form action='checkout' name='checkout' method='get'><button name='shoppingCart' type=\"submit\" value='"+session.getAttribute("shoppingCart")+"'> Check Out </button></form></p>"
-
 					);
+			
 			RequestDispatcher requestFooter=request.getRequestDispatcher("/footer.html");
 			requestFooter.include(request, response);
 			

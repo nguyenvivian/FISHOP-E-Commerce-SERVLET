@@ -19,8 +19,6 @@ public class DisplayProducts extends HttpServlet{
 	ArrayList<String> prevVisited = new ArrayList<>();
 	String session_id = new String("sessionId");
 	String prevVisitedKey = new String("prevVisited");
-    Integer numVisits = 0;
-    String numVisitsKey = new String("numVisits");
 	ArrayList<String> shoppingCart = new ArrayList<>();
 	String shoppingCartKey = new String("shoppingCart");
 
@@ -32,15 +30,10 @@ public class DisplayProducts extends HttpServlet{
 		    
 			if (session.isNew()) {
 			   session.setAttribute(session_id, session.getId());
-			} else {
-				numVisits = (Integer)session.getAttribute(numVisitsKey); 
-			   ++numVisits;
 			}
 			session.setAttribute(shoppingCartKey, shoppingCart);
 			session.setAttribute(prevVisitedKey, prevVisited);
-			session.setAttribute(numVisitsKey,  numVisits);
 			out.println("SessionID: "+ session.getId());
-			out.println("Visit #: "+ numVisits);
 				
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/sys?serverTimezone=US/Pacific", "root", "sql99server");
@@ -79,6 +72,7 @@ public class DisplayProducts extends HttpServlet{
 			out.flush();
 			out.close();
 		
-		}catch(Exception e) {System.out.println(e);}
+		}catch(Exception e) {e.printStackTrace();
+}
 	}
 }
