@@ -133,7 +133,7 @@ public class Checkout extends HttpServlet{
 			preparedStatement.setString(6, request.getParameter("ccnumber"));
 			preparedStatement.setString(7, request.getParameter("ccv"));
 			preparedStatement.setString(8, shoppingCart.toString());
-			preparedStatement.setString(9, session.getAttribute("TotalPrice").toString());
+			preparedStatement.setString(9, request.getParameter("total"));
 			
 			preparedStatement.addBatch();
 			int[] affectedRecords = preparedStatement.executeBatch();
