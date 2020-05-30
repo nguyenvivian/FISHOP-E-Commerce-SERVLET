@@ -1,28 +1,19 @@
-# FISHOP-ECommerce-Site
+# FISHOP-ECommerce-Site SERVLET
 ## Author:
 Name: Vivian Nguyen, UCINetId: nguyev12, ID#: 84955920
 ## Base URL:
-http://circinus-27.ics.uci.edu:8080/project1/index.html
+http://localhost:8080/FISHOP-Servlet-2/index.html
 ## General Navigation/Layout
-The landing page lists all the products available under their respective categories. Clicking on any product will bring the user to a product page with more information as well as the purchase form. Clicking "About Us" in the navigation bar will give the user information about the company and general information.
+The landing page lists all the products available under their respective categories. Clicking on any product will bring the user to a product page with more information as well as the add to cart button. Users can continue adding products to their cart or they can check out. Checking out will forward the user to a purchase form. Clicking "About Us" in the navigation bar will give the user information about the company and general information as well as citations for the images used.
 ## Points
-1. An overview of your business, the products you sell, the management team, and any other information that you think makes sense for the customers to know about your company.  
-   - **"About Us" in the navigation bar will list all of this information.**
-2. Display a list of products (at least 10) available for sale in a table with multiple rows and column, where each product is shown within a separate cell.
-   - **The landing page shows 4 fish food items, and 6 live fish products.**
-3. Display an image for each product available for sale in each cell.
-   - **Each product has an image. Each product's dedicated product page has three images.**
-4. Display the price and other key information (e.g., color, material, etc.) associated with each product in the corresponding table cell.
-   - **Every product either has Ingredients (fish food) or Color (live fish), a corresponding weight, and a price.**
-5. The user should be able to choose a product from this table by clicking on the corresponding image, which should lead to a new page that provides additional details about the product, e.g., more images, detailed description, etc. 
-   - **The user can click on the image, button, or title of the product to be taken to that product's dedicated product page. Each product has three supplementary images as well as a detailed description.**
-6. On the detailed description page, the user should be able to order a product by filling a form. The form should allow the user to enter the product identifier, quantity, first name, last name, phone number, shipping address, shipping method (e.g., overnight, 2-days expedited, 6-days ground), credit card information, and anything else that you think makes sense for your business.
-   - **Every product has a purchase form that must be filled out completely in order to send an e-mail.**
-7. Upon submitting the form, the website should send an email with the purchase order information included in the body of the email. Note that to really send an email, one needs to connect to the SMTP server, which is not possible with the client-side software. Thus, this requirement simply requires bringing up the email client with the purchase order information included in the body of the email and allowing the user to send the email. 
-   - **If the user fills out the form correctly, then the user's e-mail client will pop up with all of the purchase form filled out in the body of the e-mail.**
-8. Before submitting the form, it should be checked for proper formatting, including whether all fields are filled properly, whether the phone number, address, and credit card are properly formatted, etc. An alarm should be raised if a field is empty or not properly formatted to prevent submission of bad data. 
-   - **The purchase form cannot have any empty fields, and inputs with specific requirements have example formats that must be followed. If the user encounters an error, the page will reflect all the errors that must be fixed before proceeding.**
-9. Your website should use CSS to specify at least 10 stylistic properties for your website, such as the background for your table, the color and size of your font, the size of your images, and other stylistic preferences you may have.
-   - **There are more than 10 stylistic properties for each the landing page and the product pages. These properties are located in main.css and product-page.css.**
-10. Provide the ability to track the mouse movement, such that when the mouse moves over a product image, the size of the image is increased, and when the mouse moves out, the size of the image is returned back to normal. This feature can be implemented on either the page that displays the various products, or on the pages that show the details of each product, or both.
-    - **Every image on the landing page will be scaled 2x when the cursor hovers over it. Every image on the detailed product page will be magnified 1.1x when hovered over.**
+1. Include the output of two servlets to create the homepage for your e-commerce site: the first servlet should handle the displaying of the list of products obtained from a backend database, and the second servlet should use session tracking to display the last 5 products that the user has visited (viewed the product details page). In case this number is less than 5, show whatever amount of information you have stored in the session. You are required to use servlet "include" feature to implement this requirement. 
+    - **FetchProducts is the servlet class for the website's homepage. FetchProducts outputs the product card listings for of all of the available products obtained from the SQL database. The second servlet, DisplayProducts uses session tracking in order to display the last 5 products that the user has visited during their session.**
+
+2. Using servlets create a "product details" page. This page should take a product identifier as a parameter and show the product details after getting the relevant information from the database. This page should NOT have an order form, only a button to "Add to Cart". Use servlet "session" to store the products in a shopping cart. 
+	- **ProductPage is the servlet class that takes a PRODUCT_ID as a parameter, and uses that PRODUCT_ID to draw the corresponding row in the databse. This row is then used to provide the rest of the item's details such as the name, price, extended description, and additional images. Each product page has an Add to Cart button that, when clicked, will add that product to the session's shopping cart and forward the user to an overview of the items they already have in their cart.
+
+3. Using servlets create a "check out" page, which allows the user to place an order. The page should show all the products in the shopping cart and the total price. This page should have a form which will allow the user to do the following:
+-Enter shipping information: name, shipping address, phone number, credit card information, etc.
+-Submit the order for storage in the backend database
+-On successful submission, forward to the order details page. You are required to use servlet "forward" feature to implement this requirement. 
+	-**CheckOut is the servlet class that displays the session's shopping cart along with a purchase form. The inital sum of the product's prices are shown at the bottom. The user can begin to enter in their information. AJAX is used to dynamically display states based on the zip code and calculate tax rates and shipping costs into the total price. Users can enter their information and submit their order. If their inputs are valid and accepted by the databse, then it is stored in the table, PRODUCT_ORDERS. A successful submission will forward the user to a confirmation page in which all of their shopping cart and personal information will be detailed.
