@@ -54,14 +54,12 @@ public class ProductPage extends HttpServlet{
 					"<div class=\"nav\">\n" + 
 					"    <a href=\"index.html\">SHOP</a>\n" + 
 					"    <a href=\"about.html\">ABOUT US</a>\n" + 
-					"    <a href=\"about.html\">SHOPPING CART</a>\n" +
 					"</div>\n" + 
 					"<!-- END HEADER -->\n");
 			
 			out.println("<!-- BEGIN MIDDLE -->\n" + 
 					"<div class=\"listing\" id=\""+ result.getString("PATH") +"\">\n" + 
 					"    <header>"+result.getString("NAME")+"</header>\n" + 
-					"    <header>PURCHASE FORM</header>\n" + 
 					"    <div class=\" picture-carousel\" id=\"pictureCarousel\">\n" + 
 					"        <a class=\"prev\" onclick=\"showPicture(-1)\">\n" + 
 					"            < </a>\n" + 
