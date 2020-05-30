@@ -26,9 +26,7 @@ public class ShoppingCart extends HttpServlet{
 			RequestDispatcher requestHeader=request.getRequestDispatcher("/header.html");
 			requestHeader.include(request, response);
 			HttpSession session = request.getSession();
-			
-			System.out.println(request.getParameter("PRODUCT_ID"));
-			
+						
 			ArrayList<String> shoppingCart = (ArrayList<String>) session.getAttribute("shoppingCart");
 			shoppingCart.add(request.getParameter("PRODUCT_ID"));			
 			
@@ -75,7 +73,7 @@ public class ShoppingCart extends HttpServlet{
 			out.flush();
 			out.close();
 	
-		}catch(Exception e) {System.out.println(e);}
+		}catch(Exception e) {e.printStackTrace();}
 		
 	}
 }

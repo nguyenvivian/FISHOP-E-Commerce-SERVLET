@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 @WebServlet("/checkout")
 public class Checkout extends HttpServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,7 +34,7 @@ public class Checkout extends HttpServlet{
 
 			RequestDispatcher requestHeader=request.getRequestDispatcher("/header.html");
 			requestHeader.include(request, response);
-			out.println(request.getParameter("shoppingCart"));
+
 			out.println("<div>");
 			out.println(
 					"<h1><strong>Shopping Cart</strong></h1>\n" + 
@@ -44,7 +48,7 @@ public class Checkout extends HttpServlet{
 					"</tr>\n" + 
 					"</thead>\n" + 
 					"<tbody >\n" );
-			float totalPrice = (float) 0.0;
+			float prePrice = (float) 0.0;
 			for (int i = 0; i < ((ArrayList<String>) session.getAttribute("shoppingCart")).size(); ++i) {
 				Statement statement = connection.createStatement();
 				ResultSet results = statement.executeQuery ("SELECT * FROM PRODUCT_CARD where product_id="+shoppingCart.get(i));
@@ -57,7 +61,7 @@ public class Checkout extends HttpServlet{
 						"<td style='border-left: 1px solid black;'>"+results.getFloat("PRICE")+"</td>\n" +
 						"</tr>\n"
 				);
-				totalPrice += results.getFloat("PRICE");
+				prePrice += results.getFloat("PRICE");
 				results.close();
 				statement.close();
 			}
@@ -66,6 +70,7 @@ public class Checkout extends HttpServlet{
 					"</table>");
 			out.println("<div>");
 			
+			BigDecimal totalPrice = (new BigDecimal(prePrice)).setScale(2, BigDecimal.ROUND_HALF_UP);
 			out.println(
 					"        <form style='display:block;' id='myForm' onsubmit='return checkForm();' action='checkout' method='post'>\n" + 
 					"            <p style='color:darkred;' class='error' id='error'></p>\n" + 
@@ -82,9 +87,9 @@ public class Checkout extends HttpServlet{
 					"            <label for='state'>State:</label>\n" + 
 					"            <input style='display:block;' type='text' name='state' id='state'>\n" + 
 					"            <label for='postalCode'>Postal Code (XXXXX):</label>\n" + 
-					"            <input style='display:block;' type='text' name='postalCode' id='postalCode'  onblur='calcTax(this.value,"+totalPrice+")'>\n" + 
+					"            <input style='display:block;' type='text' name='postalCode' id='postalCode'  onblur='return calcTax(this.value,"+totalPrice+");'>\n" + 
 					"            <label for='shippingMethod'>Shipping Method:</label>\n" + 
-					"            <select style='display:block;' id='shippingMethod' name='shippingMethod' onChange='addShipping(this.value)'>\n" + 
+					"            <select style='display:block;' id='shippingMethod' name='shippingMethod' onChange='return addShipping(this.value);'>\n" + 
 					"                <option value='default' selected='selected'>Select From List</option>\n" + 
 					"                <option>Overnight $20 </option>\n" + 
 					"                <option>2 Days Expedited $15</option>\n" + 
@@ -94,11 +99,14 @@ public class Checkout extends HttpServlet{
 					"            <input style='display:block;' type='text' name='ccnumber' id='ccnumber'>\n" + 
 					"            <label for='ccv'>CCV (XXX) or (XXXX):</label>\n" + 
 					"            <input style='display:block;' type='text' name='ccv' id='ccv'>\n" + 
+					"			 <label for=\"total\">Total Price + Shipping + Tax Rate (<a id='taxrate' name='taxrate'></a>): </label>\n" +
+					"			 <input style='width: 70px;' id='total' name='total' readonly='readonly' value='"+totalPrice+"'>" +
 					"            <input style='display:block;' type='submit' id='submit'>\n" + 
-					"        </form>\n"+
-					" <label for=\"total\">Total Price + Shipping + Tax Rate (<a id='taxrate' name='taxrate'></a>): </label>\n" +
-					"<p id='total'>"+(new BigDecimal(totalPrice)).setScale(2, BigDecimal.ROUND_HALF_UP)+" <p>");
-			session.setAttribute("TotalPrice", (new BigDecimal(totalPrice)).setScale(2, BigDecimal.ROUND_HALF_UP));
+
+					"        </form>\n");
+					
+
+			session.setAttribute("TotalPrice", totalPrice);
 			RequestDispatcher requestFooter=request.getRequestDispatcher("/footer.html");
 			requestFooter.include(request, response);
 			out.flush();
@@ -115,7 +123,7 @@ public class Checkout extends HttpServlet{
 			
 			HttpSession session = request.getSession();
 			ArrayList<String> shoppingCart = (ArrayList<String>) session.getAttribute("shoppingCart");
-			
+
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, request.getParameter("fname"));
 			preparedStatement.setString(2, request.getParameter("lname"));

@@ -30,7 +30,6 @@ public class SubmitOrder extends HttpServlet{
 					"<p>Thank you, "+request.getParameter("fname")+" "+request.getParameter("lname")+"</p>\n" + 
 					"<p>Your order with the following items:</p>\n");
 			
-			float totalPrice = (float) 0.0;
 			
 			ArrayList<String> shoppingCart = (ArrayList<String>) session.getAttribute("shoppingCart");
 			for (int i = 0; i < shoppingCart.size(); ++i) {
@@ -40,14 +39,13 @@ public class SubmitOrder extends HttpServlet{
 				out.println(
 						"<p style='color: red;'> - "+results.getString("NAME")+"</p>\n"
 				);
-				totalPrice += results.getFloat("PRICE");
 				results.close();
 				statement.close();
 			}
 			
 			
 			out.println(
-					"<p>for a total of $"+totalPrice+" has been successfully placed.</p>\n" + 
+					"<p>for a total of $"+request.getParameter("total")+" has been successfully placed.</p>\n" + 
 					"<p>We will be delivering it to "+request.getParameter("street")+" "+request.getParameter("city")+" "+request.getParameter("state")+" "+request.getParameter("postalCode")+" with your contact information</p>\n" + 
 					"<p>"+request.getParameter("phoneNumber")+" with shipping option "+" "+request.getParameter("shippingMethod")+".</p>\n" + 
 					"<p>Please shop with us again!</p>");

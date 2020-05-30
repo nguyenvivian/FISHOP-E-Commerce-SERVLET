@@ -26,7 +26,14 @@
         <servlet-name>SubmitOrder</servlet-name>
         <servlet-class>SubmitOrder</servlet-class>
   </servlet>
-
+  <servlet>
+        <servlet-name>GetTax</servlet-name>
+        <servlet-class>GetTax</servlet-class>
+  </servlet>
+  <servlet>
+        <servlet-name>AddShipping</servlet-name>
+        <servlet-class>AddShipping</servlet-class>
+  </servlet>
   
   <servlet-mapping>
         <servlet-name>DisplayProducts</servlet-name>
@@ -52,6 +59,15 @@
   		<servlet-name>SubmitOrder</servlet-name>
         <url-pattern>/submit-order</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+  		<servlet-name>GetTax</servlet-name>
+        <url-pattern>/get-tax</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  		<servlet-name>AddShipping</servlet-name>
+        <url-pattern>/add-shipping</url-pattern>
+  </servlet-mapping>
+  
     
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
